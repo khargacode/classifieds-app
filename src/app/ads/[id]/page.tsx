@@ -1,8 +1,6 @@
 import ChatBox from "@/components/ChatBox";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 
 async function getAd(id: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/ads/${id}`);
