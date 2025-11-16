@@ -38,3 +38,4 @@ export default async function AdDetails({ params }: any) {
     </div>
   );
 }
+
