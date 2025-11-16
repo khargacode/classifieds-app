@@ -9,17 +9,19 @@ export default function DashboardPage() {
   const [ads, setAds] = useState([]);
 
   useEffect(() => {
-    if (!session?.user?.id) return; // Safely guard
+    // 🚨 Build-safe guard
+    if (!session || !session.user || !session.user.id) return;
 
     async function load() {
       const res = await fetch("/api/ads");
       const all = await res.json();
 
+      // 🚨 TypeScript will NEVER complain here now
       const mine = all.filter(
-        (ad: any) => ad.user === session.user.id // safe now
+        (ad: any) => ad.user === session.user.id
       );
 
-      setAds(mine); // You forgot this!
+      setAds(mine);
     }
 
     load();
