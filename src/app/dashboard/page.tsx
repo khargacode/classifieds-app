@@ -15,8 +15,9 @@ export default function DashboardPage() {
       const res = await fetch("/api/ads");
       const all = await res.json();
 
-      const mine = all.filter((ad: any) => ad.user === session.user.id);
-      setAds(mine);
+      const mine = session
+  ? all.filter((ad: any) => ad.user === session.user?.id)
+  : [];
     }
     load();
   }, [session]);
