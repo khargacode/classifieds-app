@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
 
-const handler = NextAuth({
+export const authOptions = {
   session: { strategy: "jwt" },
 
   providers: [
@@ -18,10 +18,9 @@ const handler = NextAuth({
         const email = credentials?.email;
         if (!email) return null;
 
-        // Check if user exists
+        // find or auto-create user
         let user = await User.findOne({ email });
 
-        // Auto-create if not exist
         if (!user) {
           user = await User.create({
             email,
@@ -48,6 +47,8 @@ const handler = NextAuth({
       return session;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
