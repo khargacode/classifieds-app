@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -10,12 +10,20 @@ export const authOptions = {
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        // TODO: validate user using your DB
-        return { id: "1", email: credentials.email };
+      async authorize(credentials: any) {
+        // your login logic
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(credentials),
+        });
+
+        const user = await res.json();
+        if (user && user._id) return user;
+        return null;
       },
     }),
   ],
@@ -27,12 +35,11 @@ export const authOptions = {
     },
 
     async session({ session, token }) {
-      session.user = token.user;
+      session.user = token.user as any;
       return session;
     },
   },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
