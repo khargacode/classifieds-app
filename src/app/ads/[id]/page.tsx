@@ -28,13 +28,14 @@ export default async function AdDetails({ params }: any) {
 
       <hr className="my-5" />
 
-      {session && (
-        <ChatBox
-          adId={ad._id}
-          userId={session.user.id}
-          otherUserId={ad.user}
-        />
-      )}
+      {session?.user && (
+  <ChatBox
+    adId={ad._id}
+    userId={session.user.id}
+    otherUserId={ad.user}
+  />
+)}
+
     </div>
   );
 }
